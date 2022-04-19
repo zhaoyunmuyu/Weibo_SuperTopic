@@ -18,10 +18,11 @@ class Config():
             "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0) Opera 12.14",
             "Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02",
         ]
-        ip=['114.101.42.16:65309',
-            '220.179.255.7:8118',
-            '103.44.145.182:8080',
-            '115.223.7.110:80']
+        ip=['104.129.198.228:8800',
+            '124.205.155.157.7:9090',
+            '165.225.196.64:10605',
+            '94.74.182.148:80',
+            '202.44.193.250:8080']
         self.proxy={'http':random.choice(ip)}
         self.rank_headers = {
             "Accept": "application/json, text/plain, */*",
@@ -43,9 +44,10 @@ class Config():
         self.myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         self.mydb = self.myclient["weibo_0419"]
         self.cate_col = self.mydb["cates_id"]
-        self.page_num = 5
-        self.rank_num = 5
+        self.page_num = 300
+        self.rank_num = 10
         self.cates_name = ['游戏']
+        # self.cates_name = ['明星','红人','吐槽','影视综','体育','游戏','日本动漫','好好学习','校园','企业']
 
     def show_config(self):
         for name,value in vars(self).items():
