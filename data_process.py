@@ -16,7 +16,7 @@ def extarct_container(ori_data):
     container_describe = ori_data.get('data').get('pageInfo').get('desc')
     container_info = ori_data.get('data').get('pageInfo').get('desc_more')[0]
     container_sub = ori_data.get('data').get('pageInfo').get('portrait_sub_text')
-    return {'container_id':container_id,'container_name':container_name,
+    return {'type':'describe','container_id':container_id,'container_name':container_name,
             'container_describe':container_describe,'container_info':container_info,
             'container_sub':container_sub}
 
@@ -45,7 +45,7 @@ def extract_page(ori_data):
                     follow_count = blogData.get('user').get('follow_count')
                     followers_count = blogData.get('user').get('followers_count')
                     verified = blogData.get('user').get('verified')
-                    result = {'text':text,'created_at':created_at,'latest_update':latest_update,
+                    result = {'type':'weibo','text':text,'created_at':created_at,'latest_update':latest_update,
                               'attitudes_count':attitudes_count,'comments_count':comments_count,'reposts_count':reposts_count,
                               'user':{'user_id':user_id,'user_name':user_name,'follow_count':follow_count,
                               'followers_count':followers_count,'verified':verified}}
