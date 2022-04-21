@@ -68,5 +68,6 @@ def get_topics(config):
 if __name__ == '__main__':
     config = Config()
     # cates = get_cates(config)
-    need_name = ['游戏','虚拟偶像']
-    result = get_topics(config,need_name)
+    need_name = ['日韩动漫']
+    result = get_topics(config)
+    print(result)

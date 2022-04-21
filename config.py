@@ -7,8 +7,12 @@
 
 '''
 
+import json
+import time
+import requests
 import random
 import pymongo
+from data_process import extract_page
 
 class Config():
     def __init__(self):
@@ -18,12 +22,15 @@ class Config():
             "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0) Opera 12.14",
             "Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02",
         ]
-        ip=['104.129.198.228:8800',
-            '124.205.155.157.7:9090',
+        self.ip=['104.129.198.228:8800',
+            '124.205.155.157:9090',
             '165.225.196.64:10605',
             '94.74.182.148:80',
-            '202.44.193.250:8080']
-        self.proxy={'http':random.choice(ip)}
+            '202.44.193.250:8080',
+            '93.157.163.66:35081',
+            '95.0.168.50:1981',
+            '112.78.14.167:3128']
+        self.proxy={'http':random.choice(self.ip)}
         self.rank_headers = {
             "Accept": "application/json, text/plain, */*",
             "Accept-Encoding": "gzip, deflate, br",
@@ -46,10 +53,35 @@ class Config():
         self.cate_col = self.mydb["cates_id"]
         self.page_num = 300
         self.rank_num = 10
-        self.cates_name = ['游戏']
-        # self.cates_name = ['明星','红人','吐槽','影视综','体育','游戏','日本动漫','好好学习','校园','企业']
-
+        # self.cates_name = ['日韩动漫','校园']
+        self.cates_name = ['吐槽']
+        
     def show_config(self):
         for name,value in vars(self).items():
             print(name+":",value)
         print(self.myclient.list_database_names())
+    
+    def test_ipPool(self):
+        for ip in self.ip:
+                proxy = {'http':ip}
+                print('测试ip:'+ip)
+                i = 0
+                while i < 5:
+                    try:
+                        base_url='''https://m.weibo.cn/api/container/getIndex?containerid=1008083829ec9f6d5c6b53889bd24dfb2eac1c'''
+                        r=requests.get(base_url,headers=self.header,proxies=proxy)
+                        ori_data=json.loads(r.text)
+                        _,_ = extract_page(ori_data)
+                        print('IP:'+ip+' 获取数据成功')
+                        i += 1
+                        time.sleep(4)
+                    except Exception as e:
+                        print(e)
+                        i += 1
+                        print('IP:'+ip+' 获取数据失败')
+                        time.sleep(4)
+                        continue
+    
+if __name__ == '__main__':
+    config = Config()
+    config.test_ipPool()
