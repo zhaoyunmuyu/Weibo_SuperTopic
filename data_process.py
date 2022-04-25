@@ -7,6 +7,9 @@
 
 '''
 
+import time
+import json
+import requests
 from w3lib.html import remove_tags
 
 # 超话信息
@@ -30,8 +33,18 @@ def extract_page(ori_data):
             for item in temp:
                 if 'mblog' in item:
                     blogData = item.get('mblog')
-                    # (处理全文)
-                    text = remove_tags(blogData.get('text'))
+                    text = remove_tags(blogData.get('text').replace('全文', ''))
+                    # 处理长文本微博
+                    if blogData.get('isLongText') == 1:           
+                        id = blogData.get('id')
+                        time.sleep(1)
+                        try:
+                            text_url = 'https://m.weibo.cn/statuses/extend?id='+id
+                            text_r=requests.get(text_url)
+                            long_text = json.loads(text_r.text).get('data').get('longTextContent')
+                            text = remove_tags(long_text)
+                        except:
+                            pass
                     # 点赞评论转发
                     attitudes_count = blogData.get('attitudes_count')
                     comments_count = blogData.get('comments_count')

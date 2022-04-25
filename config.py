@@ -22,15 +22,6 @@ class Config():
             "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0) Opera 12.14",
             "Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02",
         ]
-        self.ip=['104.129.198.228:8800',
-            '124.205.155.157:9090',
-            '165.225.196.64:10605',
-            '94.74.182.148:80',
-            '202.44.193.250:8080',
-            '93.157.163.66:35081',
-            '95.0.168.50:1981',
-            '112.78.14.167:3128']
-        self.proxy={'http':random.choice(self.ip)}
         self.rank_headers = {
             "Accept": "application/json, text/plain, */*",
             "Accept-Encoding": "gzip, deflate, br",
@@ -53,9 +44,17 @@ class Config():
         self.cate_col = self.mydb["cates_id"]
         self.page_num = 300
         self.rank_num = 10
-        # self.cates_name = ['日韩动漫','校园']
-        self.cates_name = ['吐槽']
-        
+        self.process_num = 5
+        self.all_cates = ['cates_id','影视综','游戏','吐槽','体育运动','日韩动漫','虚拟偶像','动漫角色','明星','红人','LPL','校园']
+        self.cates_name = ['明星']                             # 获取超话类别
+        self.target_topic = ['易烊千玺','贺峻霖']               # 选取类别中的某些超话，全选则为空
+
+    def get_proxy(self):
+        json = requests.get("http://127.0.0.1:5010/get").json()
+        ip = json['proxy']
+        http = 'http' if json['https'] == False else 'https'
+        return {http:ip}
+
     def show_config(self):
         for name,value in vars(self).items():
             print(name+":",value)
@@ -84,4 +83,7 @@ class Config():
     
 if __name__ == '__main__':
     config = Config()
-    config.test_ipPool()
+    proxy = config.get_proxy()
+    print('INFO:IP:'+proxy[list(proxy.keys())[0]].split(':')[0])
+    r= requests.get("http://www.baidu.com",headers=config.header,proxies=config.get_proxy())
+    print(r)
