@@ -54,5 +54,5 @@ def make_wordcloud(topic:str,cover):
 
 if __name__ == '__main__':
     config = Config()
-    # make_wordcloud('原神',cover=1).show()
-    word_cloud(config)
+    make_wordcloud('knight卓定',cover=1).show()
+    # word_cloud(config)

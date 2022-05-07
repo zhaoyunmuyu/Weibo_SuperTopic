@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+/proxy_pool-2.4.0
 /data
 /pic
 *.csv

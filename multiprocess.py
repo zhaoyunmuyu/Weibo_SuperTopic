@@ -42,6 +42,7 @@ class loader():
                 if i == 1:
                     container_info = extarct_container(ori_data)
                     container_col = mydb[container_info['container_name']]
+                    container_col.delete_many({})
                     container_col.insert_one(container_info)
                     print('INFO:获取超话:',container_info['container_name'])
                 lastpage,weibo = extract_page(ori_data)
@@ -64,6 +65,7 @@ class loader():
             base_url=re.sub(self.pat,'since_id='+str(lastpage),base_url)
             i += 1
             time.sleep(4)
+        return
 
 if __name__  == '__main__':
     load = loader(config.page_num,config.header)

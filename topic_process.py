@@ -20,17 +20,28 @@ def get_cates(config):
     cate_data.pop('is_party')
     cate_data.pop('lbs_cate')
     cat_dic = {}
+    config.cate_col.delete_many({})
     for item in cate_data['cates']:
         child = {}
-        for chi in item.get('child'):
-            if chi.get('id') != 0:
-                chi_name = chi.get('name')
-                chi_id = chi.get('id')
+        # 处理游戏类别
+        if item.get('name') == '游戏':
+            game_url = 'https://huati.weibo.cn/aj/discovery/rank?cate_id={id}&page=1&topic_to_page=&from=&wm=&isvivo=false'.format(id = item.get('id'))
+            r=requests.get(game_url,headers=config.rank_headers)
+            for item in json.loads(r.text).get('data').get('top_one'):
+                chi_id = item.get('ctg_id')
+                chi_name = item.get('short_rank_name')
                 child[chi_name] = chi_id
                 config.cate_col.insert_one({'name':chi_name,'id':chi_id})
+        else:
+            for chi in item.get('child'):
+                if chi.get('id') != 0:
+                    chi_name = chi.get('name')
+                    chi_id = chi.get('id')
+                    child[chi_name] = chi_id
+                    config.cate_col.insert_one({'name':chi_name,'id':chi_id})
         cat_dic[item.get('name')] = {'total':1,'id':item.get('id'),'child':child}
         config.cate_col.insert_one({'name':item.get('name'),'id':item.get('id')})
-    config.cate_col.insert_one(cate_data)
+    #config.cate_col.insert_one(cate_data)
     return cat_dic
 
 # 查询对应类别的ID
@@ -39,11 +50,12 @@ def get_topics(config):
     for temp in config.cates_name:
         print('INFO:获取超话类别:',temp)
         topic_col = config.mydb[temp]
+        topic_col.delete_many({})
         query = {"name": temp}
         if temp == '明星':
             topics = get_topics_stars(config)
         else:
-            x = config.cate_col.find(query)[-1]
+            x = config.cate_col.find(query)[0]
             id = x['id']
             base_url='''https://huati.weibo.cn/aj/discovery/rank?cate_id={id}&page=1&topic_to_page=&block_time=0&star_type=star&from=&wm=&isvivo=false'''
             url = base_url.format(id=id)
@@ -101,4 +113,5 @@ def get_topics_stars(config):
 
 if __name__ == '__main__':
     config = Config()
- 
+    get_cates(config)
+    get_topics(config)

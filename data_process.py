@@ -45,6 +45,7 @@ def extract_page(ori_data):
                             text = remove_tags(long_text)
                         except:
                             pass
+                    text.replace('网页链接', '')
                     # 点赞评论转发
                     attitudes_count = blogData.get('attitudes_count')
                     comments_count = blogData.get('comments_count')
