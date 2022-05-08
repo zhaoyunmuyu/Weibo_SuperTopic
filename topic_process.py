@@ -50,7 +50,6 @@ def get_topics(config):
     for temp in config.cates_name:
         print('INFO:获取超话类别:',temp)
         topic_col = config.mydb[temp]
-        topic_col.delete_many({})
         query = {"name": temp}
         if temp == '明星':
             topics = get_topics_stars(config)

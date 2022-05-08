@@ -71,7 +71,7 @@ def make_network(limit_rate:float):
         for i in range(1,config.rank_num+1):
             topic_dict[x[str(i)].get('display_name')] = cate
             ## 其他属性   
-
+        # topic_dict['咒术回战'] = '日韩动漫'
     df = pd.read_csv('cover_rate.csv',encoding='GBK')
     df2 = df[[float(rate) > limit_rate for rate in df['cover_rate']]]
     df2 = df2.reset_index(drop=True)
@@ -97,7 +97,7 @@ def make_network(limit_rate:float):
             color_dict[cate] = color[0]
             color.pop(0)
             cate_color = color_dict[cate]
-        nx.draw_networkx_nodes(g,pos=pos,nodelist=[node],alpha=0.6,node_color=cate_color,node_size=usr_num*1.5,linewidths=1)
+        nx.draw_networkx_nodes(g,pos=pos,nodelist=[node],alpha=0.6,node_color=cate_color,node_size=usr_num*6,linewidths=1)
     for edge,data in g.edges().items():
         weight = data['weight']
         nx.draw_networkx_edges(g,pos=pos,edgelist=[edge],width=weight*10,edge_color='k')
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     # topics = ['Tian高天亮','fpx']
     # result = compare(topics)
     # compare_all()
-    make_network(0.08)
+    make_network(0.04)
 
 
     

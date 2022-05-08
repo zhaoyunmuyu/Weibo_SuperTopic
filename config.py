@@ -42,12 +42,12 @@ class Config():
         self.myclient = pymongo.MongoClient("mongodb://localhost:27017/")
         self.mydb = self.myclient["weibo_0507"]
         self.cate_col = self.mydb["cates_id"]
-        self.page_num = 50
+        self.page_num = 300
         self.rank_num = 10
         self.process_num = 5
-        self.all_cates = ['cates_id','影视综','游戏','吐槽','体育运动','日韩动漫','虚拟偶像','动漫角色','明星','红人','LPL','校园']
+        self.all_cates = ['cates_id','影视综','本地','游戏','体育运动','日韩动漫','虚拟偶像','动漫角色','明星','红人','LPL']
         self.cates_name = ['影视综','本地','游戏','体育运动','日韩动漫','虚拟偶像','动漫角色','明星','红人','LPL']                             # 获取超话类别
-        self.target_topic = []                # 选取类别中的某些超话，全选则为空
+        self.target_topic = ['knight卓定']                # 选取类别中的某些超话，全选则为空
 
     def get_proxy(self):
         json = requests.get("http://127.0.0.1:5010/get").json()

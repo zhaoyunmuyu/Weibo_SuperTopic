@@ -42,6 +42,9 @@ class loader():
                 if i == 1:
                     container_info = extarct_container(ori_data)
                     container_col = mydb[container_info['container_name']]
+                    # if container_col.find().count() >= 450:
+                    #     print('INFO:超话',container_info['container_name'],'已存在')
+                    #     return
                     container_col.delete_many({})
                     container_col.insert_one(container_info)
                     print('INFO:获取超话:',container_info['container_name'])
@@ -51,11 +54,11 @@ class loader():
             except Exception as e:
                 print(e)
                 requests.get("http://127.0.0.1:5010/delete/?proxy={}".format(proxy[list(proxy.keys())[0]]))
-                print("删除:",proxy[list(proxy.keys())[0]])
+                # print("删除:",proxy[list(proxy.keys())[0]])
                 print('获取数据失败:'+'INFO:IP:'+proxy[list(proxy.keys())[0]].split(':')[0]+',超话\"'+container_info['container_name']+'\"第{}页'.format(i))
                 if error_time > 5:
                     # logging
-                    break
+                    return
                 error_time += 1
                 time.sleep(10)
                 continue
@@ -98,4 +101,6 @@ if __name__  == '__main__':
         containers[cate] = container
     pool = Pool(processes = config.process_num)
     pool.map(load.get_weibo, urls)
+    pool.close()  # 关闭进程池
+    pool.join()   # 等待进程池中的所有进程执行完毕
     print("Finish:获取超话:",containers)
